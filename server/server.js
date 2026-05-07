@@ -22,6 +22,8 @@ import { initAdminPassword } from "./controllers/authController.js";
 
 const PORT = Number(process.env.PORT) || 5050;
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
+let lastDbError = "not attempted";
+let lastDbAttemptAt = 0;
 
 const app = express();
 const httpServer = createServer(app);
@@ -35,6 +37,23 @@ app.set("io", io);
 
 app.get("/", (_req, res) => {
   res.type("text").send("sanjhi-panel-server ok");
+});
+
+app.get("/api/debug/db", (_req, res) => {
+  res.json({
+    ok: true,
+    readyState: mongoose.connection.readyState,
+    readyStateText:
+      mongoose.connection.readyState === 1
+        ? "connected"
+        : mongoose.connection.readyState === 2
+          ? "connecting"
+          : mongoose.connection.readyState === 3
+            ? "disconnecting"
+            : "disconnected",
+    lastDbAttemptAt,
+    lastDbError,
+  });
 });
 
 app.use("/api/devices", deviceRoutes);
@@ -107,12 +126,15 @@ httpServer.listen(PORT, () => {
 
 async function connectWithRetry() {
   const retryMs = 10000;
+  lastDbAttemptAt = Date.now();
   try {
     await connectDB();
+    lastDbError = "";
     await initAdminPassword();
     startWatch();
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    lastDbError = msg;
     console.error(`[db] connect failed: ${msg}`);
     console.error(`[db] retrying in ${retryMs / 1000}s...`);
     setTimeout(() => {
