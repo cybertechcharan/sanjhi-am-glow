@@ -23,8 +23,6 @@ import { initAdminPassword } from "./controllers/authController.js";
 const PORT = Number(process.env.PORT) || 5050;
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
 
-await connectDB();
-
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -103,11 +101,24 @@ function startWatch() {
   }
 }
 
-mongoose.connection.once("open", () => {
-  void initAdminPassword();
-  startWatch();
-});
-
 httpServer.listen(PORT, () => {
   console.log(`sanjhi-panel-server http://localhost:${PORT}`);
 });
+
+async function connectWithRetry() {
+  const retryMs = 10000;
+  try {
+    await connectDB();
+    await initAdminPassword();
+    startWatch();
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[db] connect failed: ${msg}`);
+    console.error(`[db] retrying in ${retryMs / 1000}s...`);
+    setTimeout(() => {
+      void connectWithRetry();
+    }, retryMs);
+  }
+}
+
+void connectWithRetry();

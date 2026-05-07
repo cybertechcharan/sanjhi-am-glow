@@ -3,9 +3,11 @@ import mongoose from "mongoose";
 export async function connectDB() {
   const uri = process.env.MONGO_URI;
   if (!uri) {
-    console.error("MONGO_URI is not set");
-    process.exit(1);
+    throw new Error("MONGO_URI is not set");
   }
-  await mongoose.connect(uri, { autoIndex: true });
+  await mongoose.connect(uri, {
+    autoIndex: true,
+    serverSelectionTimeoutMS: 15000,
+  });
   console.log("MongoDB connected");
 }
