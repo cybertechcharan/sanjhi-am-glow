@@ -1,0 +1,22 @@
+{
+  "name": "sanjhi-panel-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Express + MongoDB + Socket.IO API (webrtochallan-style). Wire the Vite app here instead of PocketBase when ready.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongoose": "^8.8.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

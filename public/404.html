@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    // Redirect all 404s to index.html with the path preserved
+    var path = window.location.pathname + window.location.search + window.location.hash;
+    window.location.replace('/' + '?redirect=' + encodeURIComponent(path));
+  </script>
+</head>
+</html>
