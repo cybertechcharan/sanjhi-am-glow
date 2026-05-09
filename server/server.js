@@ -30,6 +30,7 @@ import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import Device from "./models/Device.js";
 import { initAdminPassword } from "./controllers/authController.js";
+import { runMigrations } from "./migrations/runMigrations.js";
 
 const PORT = Number(process.env.PORT) || 5050;
 const RAW_CORS = (process.env.CORS_ORIGIN || "").trim();
@@ -197,6 +198,7 @@ async function connectWithRetry() {
   try {
     await connectDB();
     lastDbError = "";
+    await runMigrations();
     await initAdminPassword();
     startWatch();
   } catch (err) {
