@@ -322,7 +322,7 @@ const PublicDeviceView = ({ restrictedDeviceId, onLogout }: PublicDeviceViewProp
                 <span className="text-sm text-muted-foreground font-medium">/month</span>
               </motion.div>
               <p className="text-sm text-muted-foreground">
-                Everything you need to monitor & manage devices â€” at an unbeatable price.
+                Everything you need to monitor & manage devices — at an unbeatable price.
               </p>
             </motion.div>
           </div>

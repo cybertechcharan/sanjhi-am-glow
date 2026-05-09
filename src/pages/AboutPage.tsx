@@ -27,7 +27,7 @@ const AboutPage = () => {
     { icon: Zap, title: "Speed First", desc: "We move fast and ship faster. Every feature is optimized for real-time performance." },
     { icon: Shield, title: "Bulletproof Security", desc: "Military-grade encryption and zero-knowledge architecture protect every operation." },
     { icon: Globe, title: "Global Reach", desc: "Our infrastructure spans across continents for seamless worldwide access." },
-    { icon: Code, title: "Built Different", desc: "We don't follow trends â€” we set them. Custom-engineered from the ground up." },
+    { icon: Code, title: "Built Different", desc: "We don't follow trends — we set them. Custom-engineered from the ground up." },
   ];
 
   return (
@@ -80,7 +80,7 @@ const AboutPage = () => {
 
               <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
                 We are the <span className="text-foreground font-bold">biggest and craziest</span> team of developers on Telegram. 
-                We build what others only dream of â€” raw, powerful, and unapologetically advanced panels that push every boundary.
+                We build what others only dream of — raw, powerful, and unapologetically advanced panels that push every boundary.
               </p>
             </div>
           </motion.div>
@@ -102,7 +102,7 @@ const AboutPage = () => {
               <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Our Mission</h2>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              We don't just build software â€” we engineer <span className="text-foreground font-semibold">weapons-grade tools</span> for 
+              We don't just build software — we engineer <span className="text-foreground font-semibold">weapons-grade tools</span> for 
               those who demand the absolute best. Our team lives and breathes Telegram development, 
               creating panels that are <span className="text-foreground font-semibold">faster, smarter, and more powerful</span> than anything else out there. 
               No compromises. No shortcuts. Just pure, unmatched engineering.
@@ -147,7 +147,7 @@ const AboutPage = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-primary text-primary-foreground text-sm font-bold shadow-[0_0_30px_hsl(var(--primary)/0.3)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:scale-[1.02] active:scale-[0.97] transition-all"
               >
-                ðŸ’¬ Hit us up @CyberMatrix_Admin
+                💬 Hit us up @CyberMatrix_Admin
               </a>
             </div>
           </motion.div>

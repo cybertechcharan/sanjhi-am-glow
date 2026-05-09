@@ -26,7 +26,7 @@ const ACCESS_PLANS = [
     days: 36500,
     icon: Crown,
     popular: true,
-    description: "Unlimited forever access Â· One time",
+    description: "Unlimited forever access · One time",
   },
 ];
 
@@ -322,7 +322,7 @@ const AccessModal = ({ open, onClose, daysRemaining, mode = "access" }: AccessMo
                         transition={{ delay: 0.4 }}
                         className="text-xl font-black text-foreground"
                       >
-                        Payment Successful! ðŸŽ‰
+                        Payment Successful! 🎉
                       </motion.p>
                       <motion.p
                         initial={{ opacity: 0, y: 10 }}
@@ -532,7 +532,7 @@ const AccessModal = ({ open, onClose, daysRemaining, mode = "access" }: AccessMo
                             size="sm"
                           >
                             <Ticket className="h-4 w-4" />
-                            {couponApplied > 0 ? "Coupon Applied âœ“" : "Apply Coupon"}
+                            {couponApplied > 0 ? "Coupon Applied ✓" : "Apply Coupon"}
                           </Button>
                         </motion.div>
                       )}
@@ -635,7 +635,7 @@ const AccessModal = ({ open, onClose, daysRemaining, mode = "access" }: AccessMo
                     <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-1">Send Exactly</p>
                     <p className="text-4xl font-black text-primary">${uniqueAmount}</p>
                     <p className="text-[10px] text-muted-foreground mt-1">USDT on BEP20 (BSC)</p>
-                    <p className="text-[8px] text-yellow font-bold mt-2">âš  Send exact amount for auto-verification</p>
+                    <p className="text-[8px] text-yellow font-bold mt-2">⚠ Send exact amount for auto-verification</p>
                   </div>
 
                   <div className="rounded-2xl border border-primary/15 bg-card/40 p-4 space-y-3">
@@ -652,7 +652,7 @@ const AccessModal = ({ open, onClose, daysRemaining, mode = "access" }: AccessMo
                       </button>
                     </div>
                     <p className="text-[8px] text-center text-destructive font-bold">
-                      âš  Only send USDT on BEP20 (BSC) network. Other tokens will be lost.
+                      ⚠ Only send USDT on BEP20 (BSC) network. Other tokens will be lost.
                     </p>
                   </div>
 
@@ -662,7 +662,7 @@ const AccessModal = ({ open, onClose, daysRemaining, mode = "access" }: AccessMo
                     className="w-full gap-2 h-12"
                   >
                     {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-                    {verifying ? "Checking transactions..." : "I've Sent â€” Verify Now"}
+                    {verifying ? "Checking transactions..." : "I've Sent — Verify Now"}
                   </Button>
 
                   <p className="text-[9px] text-center text-muted-foreground">
@@ -678,7 +678,7 @@ const AccessModal = ({ open, onClose, daysRemaining, mode = "access" }: AccessMo
                   <p className="text-[10px] text-muted-foreground">1. Select a plan</p>
                   <p className="text-[10px] text-muted-foreground">2. Choose payment method</p>
                   <p className="text-[10px] text-muted-foreground">3. Complete payment & get activated</p>
-                  <p className="text-[10px] text-muted-foreground mt-2">â€¢ Contact @CyberMatrix_Admin on Telegram for support</p>
+                  <p className="text-[10px] text-muted-foreground mt-2">• Contact @CyberMatrix_Admin on Telegram for support</p>
                 </div>
               )}
             </div>
