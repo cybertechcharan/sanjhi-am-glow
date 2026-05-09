@@ -54,6 +54,27 @@ export function requirePanelAuth(req, res, next) {
   }
 }
 
+/**
+ * Accept either panel-scope OR admin-scope tokens.
+ * Used on endpoints that every signed-in user (panel admin or superadmin)
+ * needs — /me, /change-password, /reset-totp.
+ */
+export function requireAnyAuth(req, res, next) {
+  const token = readBearer(req);
+  if (!token) return res.status(401).json({ ok: false, error: "missing token" });
+  try {
+    const decoded = jwt.verify(token, effectiveSecret);
+    if (decoded.scope !== "panel" && decoded.scope !== "admin") {
+      return res.status(403).json({ ok: false, error: "wrong scope" });
+    }
+    if (!decoded.sub) return res.status(403).json({ ok: false, error: "invalid subject" });
+    req.auth = decoded;
+    return next();
+  } catch {
+    return res.status(401).json({ ok: false, error: "invalid token" });
+  }
+}
+
 export function requireAdminAuth(req, res, next) {
   const token = readBearer(req);
   if (!token) return res.status(401).json({ ok: false, error: "missing token" });

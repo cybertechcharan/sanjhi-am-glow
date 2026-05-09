@@ -139,22 +139,11 @@ const FullscreenLoader = () => {
   );
 };
 
-const AuthenticatedApp = ({ onLogout }: { onLogout: () => Promise<void> }) => {
+const PanelShell = ({ onLogout }: { onLogout: () => Promise<void> }) => {
   const { config, loading, isExpired, isConfigured } = usePanelConfig();
-  const storedUser = getStoredUser();
-  const isSuperadmin = storedUser?.role === "superadmin";
 
   if (loading) {
     return <FullscreenLoader />;
-  }
-
-  if (isSuperadmin) {
-    return (
-      <Routes>
-        <Route path="/admin" element={<AdminPanelPage onLogout={onLogout} />} />
-        <Route path="*" element={<AdminPanelPage onLogout={onLogout} />} />
-      </Routes>
-    );
   }
 
   if (!isConfigured) {
@@ -197,6 +186,24 @@ const AuthenticatedApp = ({ onLogout }: { onLogout: () => Promise<void> }) => {
       </div>
     </div>
   );
+};
+
+const AuthenticatedApp = ({ onLogout }: { onLogout: () => Promise<void> }) => {
+  // Superadmin gets the dedicated /admin shell. We check this BEFORE entering
+  // PanelShell so we don't fire panel-scope RTDB polls with an admin-scope JWT
+  // (which would 403 on every poll).
+  const storedUser = getStoredUser();
+  const isSuperadmin = storedUser?.role === "superadmin";
+
+  if (isSuperadmin) {
+    return (
+      <Routes>
+        <Route path="*" element={<AdminPanelPage onLogout={onLogout} />} />
+      </Routes>
+    );
+  }
+
+  return <PanelShell onLogout={onLogout} />;
 };
 
 const PublicApp = () => (

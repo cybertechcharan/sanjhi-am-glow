@@ -8,7 +8,7 @@ import {
   verifyTotp,
   verifyTotpEnroll,
 } from "../controllers/authController.js";
-import { requirePanelAuth, requireTotpChallenge } from "../middleware/authMiddleware.js";
+import { requireAnyAuth, requireTotpChallenge } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -31,8 +31,10 @@ const verifyLimiter = rateLimit({
 router.post("/login", loginLimiter, login);
 router.post("/verify-totp-enroll", verifyLimiter, requireTotpChallenge, verifyTotpEnroll);
 router.post("/verify-totp", verifyLimiter, requireTotpChallenge, verifyTotp);
-router.post("/change-password", requirePanelAuth, changePassword);
-router.post("/reset-totp", requirePanelAuth, resetTotp);
-router.get("/me", requirePanelAuth, me);
+// /me, /change-password and /reset-totp are needed by both panel admins
+// (scope=panel) and superadmins (scope=admin), so they accept either scope.
+router.post("/change-password", requireAnyAuth, changePassword);
+router.post("/reset-totp", requireAnyAuth, resetTotp);
+router.get("/me", requireAnyAuth, me);
 
 export default router;
