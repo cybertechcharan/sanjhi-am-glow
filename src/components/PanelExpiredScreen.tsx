@@ -59,13 +59,13 @@ const PanelExpiredScreen = ({ adminName, expiryDate }: PanelExpiredScreenProps) 
 
             {/* CTA */}
             <a
-              href="https://t.me/xylohu"
+              href="https://t.me/CyberMatrix_Admin"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-primary text-primary-foreground text-sm font-bold shadow-[0_0_25px_hsl(var(--primary)/0.25)] hover:shadow-[0_0_35px_hsl(var(--primary)/0.35)] hover:scale-[1.02] active:scale-[0.97] transition-all"
             >
               <MessageCircle className="h-4 w-4" />
-              Message @xylohu on Telegram
+              Message @CyberMatrix_Admin on Telegram
             </a>
           </div>
         </div>

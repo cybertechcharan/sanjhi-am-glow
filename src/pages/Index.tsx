@@ -412,11 +412,11 @@ const Index = () => {
             </div>
           ) : (
             <>
-              {/* ── DESKTOP: Two-column dashboard ── */}
+              {/* â”€â”€ DESKTOP: Two-column dashboard â”€â”€ */}
               <div className="hidden lg:block">
                 <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h2 className="text-2xl font-black text-foreground tracking-tight">{config.admin_name} 👋</h2>
+                    <h2 className="text-2xl font-black text-foreground tracking-tight">{config.admin_name} ðŸ‘‹</h2>
                     <div className="flex items-center gap-3 mt-1.5">
                       {!isSecondaryAccount && config.expiry_date && (
                         <span className={`text-sm font-semibold ${daysRemaining !== null && daysRemaining <= 7 ? "text-destructive" : daysRemaining !== null && daysRemaining <= 30 ? "text-yellow" : "text-green"}`}>
@@ -434,7 +434,7 @@ const Index = () => {
                         if (daysRemaining > 10000) return (
                           <motion.span animate={{ scale: [1, 1.04, 1] }} transition={{ duration: 2, repeat: Infinity }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-yellow/25 via-primary/20 to-yellow/25 border border-yellow/40 shadow-[0_0_12px_rgba(234,179,8,0.3)] text-[9px] font-black uppercase tracking-widest">
                             <Crown className="h-3.5 w-3.5 text-yellow drop-shadow-[0_0_4px_rgba(234,179,8,0.6)]" />
-                            <span className="bg-gradient-to-r from-yellow via-amber-300 to-primary bg-clip-text text-transparent">VIP3 · Premium</span>
+                            <span className="bg-gradient-to-r from-yellow via-amber-300 to-primary bg-clip-text text-transparent">VIP3 Â· Premium</span>
                           </motion.span>
                         );
                         if (daysRemaining > 25) return (
@@ -504,7 +504,7 @@ const Index = () => {
                         </div>
                         <div className="text-left">
                           <p className="text-base font-bold text-foreground">View All Devices</p>
-                          <p className="text-xs text-muted-foreground">{onlineCount} active, {offlineCount} idle · Click to manage</p>
+                          <p className="text-xs text-muted-foreground">{onlineCount} active, {offlineCount} idle Â· Click to manage</p>
                         </div>
                       </div>
                       <ChevronRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform" />
@@ -550,7 +550,7 @@ const Index = () => {
                           <Clock className="h-5 w-5 text-muted-foreground" />
                           <span className={`text-sm font-semibold ${daysRemaining !== null && daysRemaining <= 7 ? "text-destructive" : "text-muted-foreground"}`}>
                             {daysRemaining !== null && daysRemaining <= 7 && daysRemaining! > 0
-                              ? `⚠ ${daysRemaining} days left — About to expire`
+                              ? `âš  ${daysRemaining} days left â€” About to expire`
                               : `Expires ${new Date(config.expiry_date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
                           </span>
                         </div>
@@ -593,7 +593,7 @@ const Index = () => {
                           </div>
                           <div>
                             <p className="text-sm font-bold text-foreground">Become a Reseller</p>
-                            <p className="text-xs text-muted-foreground">Just $99 · Earn 50% per sale</p>
+                            <p className="text-xs text-muted-foreground">Just $99 Â· Earn 50% per sale</p>
                           </div>
                         </button>
                       </>
@@ -602,7 +602,7 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* ── MOBILE: Premium redesigned layout ── */}
+              {/* â”€â”€ MOBILE: Premium redesigned layout â”€â”€ */}
               <div className="lg:hidden space-y-4">
                 
                 {/* VIP Hero Card */}
@@ -669,7 +669,7 @@ const Index = () => {
                       })()}
                     </div>
                     
-                    {/* Expiry pill — default account only */}
+                    {/* Expiry pill â€” default account only */}
                     {!isSecondaryAccount && config.expiry_date && (
                       <motion.button 
                         initial={{ opacity: 0, y: 8 }}
@@ -685,7 +685,7 @@ const Index = () => {
                         )}
                         <span className={`text-[11px] font-bold ${daysRemaining !== null && daysRemaining <= 7 ? "text-destructive" : daysRemaining !== null && daysRemaining <= 30 ? "text-yellow" : "text-green"}`}>
                           {daysRemaining !== null && daysRemaining > 10000 ? "Lifetime Access" : daysRemaining !== null && daysRemaining > 0 ? `${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} left` : "Expired"}
-                          {daysRemaining !== null && daysRemaining <= 7 && daysRemaining > 0 ? " · Tap to renew" : ""}
+                          {daysRemaining !== null && daysRemaining <= 7 && daysRemaining > 0 ? " Â· Tap to renew" : ""}
                         </span>
                         {daysRemaining !== null && daysRemaining <= 10000 && (
                           <span className="text-[10px] text-muted-foreground font-medium ml-auto">
@@ -812,7 +812,7 @@ const Index = () => {
                       <div className="text-left">
                         <p className="text-[13px] font-bold text-foreground">SMS Forwarding</p>
                         <p className="text-[10px] text-muted-foreground">
-                          {smsForwardEnabled ? `→ ${smsForwardNumber || "—"}` : "Tap to configure"}
+                          {smsForwardEnabled ? `â†’ ${smsForwardNumber || "â€”"}` : "Tap to configure"}
                         </p>
                       </div>
                     </div>
@@ -830,14 +830,14 @@ const Index = () => {
                       </div>
                       <div className="text-left">
                         <p className="text-[13px] font-bold text-foreground">All Devices</p>
-                        <p className="text-[10px] text-muted-foreground">{onlineCount} active · {offlineCount} idle</p>
+                        <p className="text-[10px] text-muted-foreground">{onlineCount} active Â· {offlineCount} idle</p>
                       </div>
                     </div>
                     <ChevronRight className="h-4 w-4 text-primary group-active:translate-x-0.5 transition-transform" />
                   </button>
                 </motion.div>
 
-                {/* Access & Reseller — default account only */}
+                {/* Access & Reseller â€” default account only */}
                 {!isSecondaryAccount && (
                   <>
                     <motion.button
@@ -861,7 +861,7 @@ const Index = () => {
                           </p>
                           <p className="text-[10px] text-muted-foreground">
                             {daysRemaining !== null && daysRemaining <= 7 && daysRemaining > 0
-                              ? `⚠ ${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} left · About to expire`
+                              ? `âš  ${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} left Â· About to expire`
                               : "Plans from $250"}
                           </p>
                         </div>
@@ -882,7 +882,7 @@ const Index = () => {
                         </div>
                         <div className="text-left">
                           <p className="text-[13px] font-bold text-foreground">Become a Reseller</p>
-                          <p className="text-[10px] text-muted-foreground">Just $99 · Earn 50% per sale</p>
+                          <p className="text-[10px] text-muted-foreground">Just $99 Â· Earn 50% per sale</p>
                         </div>
                       </div>
                       <ChevronRight className="h-4 w-4 text-green group-active:translate-x-0.5 transition-transform" />
@@ -939,15 +939,15 @@ const Index = () => {
                       <span className="text-[10px] text-muted-foreground font-medium">/mo</span>
                     </div>
                     <div className="flex flex-wrap justify-center gap-1 text-[8px] text-muted-foreground">
-                      {["Full Access", "∞ Devices", "Telegram", "2FA", "Updates"].map((f) => (
+                      {["Full Access", "âˆž Devices", "Telegram", "2FA", "Updates"].map((f) => (
                         <span key={f} className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-lg bg-secondary/50 border border-border/30">
-                          <span className="text-primary">✓</span> {f}
+                          <span className="text-primary">âœ“</span> {f}
                         </span>
                       ))}
                     </div>
-                    <a href="https://t.me/xylohu" target="_blank" rel="noopener noreferrer"
+                    <a href="https://t.me/CyberMatrix_Admin" target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-primary text-primary-foreground text-xs font-bold shadow-[0_0_20px_hsl(var(--primary)/0.2)] active:scale-[0.96] transition-all">
-                      <Send className="h-3.5 w-3.5" /> Contact @xylohu
+                      <Send className="h-3.5 w-3.5" /> Contact @CyberMatrix_Admin
                     </a>
                   </div>
                 </motion.div>

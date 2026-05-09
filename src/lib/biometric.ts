@@ -171,7 +171,7 @@ export const verifyBiometric = async (): Promise<boolean> => {
       const credential = await navigator.credentials.create({
         publicKey: {
           challenge,
-          rp: { name: "Dark x Panel", id: window.location.hostname },
+          rp: { name: "Cyber Panel", id: window.location.hostname },
           user: {
             id: userId,
             name: "panel-user",

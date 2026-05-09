@@ -1,4 +1,4 @@
-import { getActivePocketBaseUrl } from "@/lib/pocketbase";
+import { apiFetch } from "@/lib/apiClient";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Database = any;
@@ -64,32 +64,17 @@ export class DataSnapshot {
   }
 }
 
-function apiBase() {
-  return getActivePocketBaseUrl();
-}
-
-async function apiPost<T>(path: string, body: Record<string, unknown>): Promise<T> {
-  const res = await fetch(`${apiBase()}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  const json = (await res.json().catch(() => ({}))) as T;
-  if (!res.ok) throw new Error(`API ${path} failed`);
-  return json;
-}
-
 export async function get(target: PathRef | QueryRef): Promise<DataSnapshot> {
   if (target instanceof QueryRef) {
-    const json = await apiPost<{ ok: boolean; value: unknown }>("/api/rtdb/query", {
-      path: target.base.path,
-      constraints: target.constraints,
+    const json = await apiFetch<{ ok: boolean; value: unknown }>("/api/rtdb/query", {
+      method: "POST",
+      body: { path: target.base.path, constraints: target.constraints },
     });
     return new DataSnapshot(json.value ?? null);
   }
-  const res = await fetch(`${apiBase()}/api/rtdb?path=${encodeURIComponent(target.path)}`);
-  const json = (await res.json().catch(() => ({}))) as { ok?: boolean; value?: unknown };
-  if (!res.ok) throw new Error("rtdb get failed");
+  const json = await apiFetch<{ ok?: boolean; value?: unknown }>(
+    `/api/rtdb?path=${encodeURIComponent(target.path)}`,
+  );
   return new DataSnapshot(json.value ?? null);
 }
 
@@ -137,22 +122,22 @@ export function onValue(target: PathRef | QueryRef, cb: Listener, options?: { on
 }
 
 export async function set(target: PathRef, value: unknown): Promise<void> {
-  await apiPost("/api/rtdb/set", { path: target.path, value });
+  await apiFetch("/api/rtdb/set", { method: "POST", body: { path: target.path, value } });
 }
 
 export async function update(target: PathRef, values: Record<string, unknown>): Promise<void> {
-  await apiPost("/api/rtdb/update", { path: target.path, values });
+  await apiFetch("/api/rtdb/update", { method: "POST", body: { path: target.path, values } });
 }
 
 export async function remove(target: PathRef): Promise<void> {
-  await apiPost("/api/rtdb/remove", { path: target.path });
+  await apiFetch("/api/rtdb/remove", { method: "POST", body: { path: target.path } });
 }
 
 export function push(target: PathRef, value?: unknown) {
   const promise = (async () => {
-    const json = await apiPost<{ ok: boolean; key: string }>("/api/rtdb/push", {
-      path: target.path,
-      value: value ?? null,
+    const json = await apiFetch<{ ok: boolean; key: string }>("/api/rtdb/push", {
+      method: "POST",
+      body: { path: target.path, value: value ?? null },
     });
     return json.key;
   })();

@@ -16,8 +16,8 @@ interface FeatureSlide {
 const SLIDES: FeatureSlide[] = [
   {
     icon: Sparkles,
-    title: "Dark X Panel 3.0",
-    subtitle: "By Fox Dev",
+    title: "Cyber Panel",
+    subtitle: "By CyberMatrix",
     color: "text-primary",
     gradient: "from-primary/30 via-accent/10 to-transparent",
   },
@@ -79,8 +79,8 @@ const SLIDES: FeatureSlide[] = [
   },
   {
     icon: Zap,
-    title: "Dark X Panel 3.0",
-    subtitle: "By Fox Dev · You're all set!",
+    title: "Cyber Panel",
+    subtitle: "By CyberMatrix · You're all set!",
     color: "text-primary",
     gradient: "from-primary/30 via-accent/10 to-transparent",
   },

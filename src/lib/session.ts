@@ -1,22 +1,37 @@
-import { ref, set, push, get, type Database } from "@/lib/rtdbPb";
-import { db } from "@/lib/firebase";
+import { type Database } from "@/lib/rtdbPb";
+import { getToken } from "@/lib/apiClient";
+import { fetchMe } from "@/lib/authPb";
+
+/**
+ * Session is JWT-based now. The token (issued by /api/auth/verify-totp[-enroll])
+ * is stored in localStorage and sent as Authorization: Bearer on every API call.
+ * The legacy random-UUID session_token + RTDB session/* tracking has been
+ * removed because the RTDB endpoint no longer accepts writes to session/*.
+ *
+ * These helpers are kept (with new behaviour) for backward compatibility with
+ * the rest of the app that imports them.
+ */
+
+const LEGACY_SESSION_TOKEN_KEY = "session_token";
 
 export const generateSessionToken = (): string => {
   return crypto.randomUUID();
 };
 
-const SESSION_TOKEN_KEY = "session_token";
-
-export const saveSessionTokenLocally = (token: string) => {
-  localStorage.setItem(SESSION_TOKEN_KEY, token);
+export const saveSessionTokenLocally = (_token: string) => {
+  // No-op. The real token is the JWT from apiClient.
 };
 
 export const getLocalSessionToken = (): string | null => {
-  return localStorage.getItem(SESSION_TOKEN_KEY);
+  return getToken();
 };
 
 export const clearLocalSessionToken = () => {
-  localStorage.removeItem(SESSION_TOKEN_KEY);
+  try {
+    localStorage.removeItem(LEGACY_SESSION_TOKEN_KEY);
+  } catch {
+    /* ignore */
+  }
 };
 
 export const fetchClientIP = async (): Promise<string> => {
@@ -29,51 +44,24 @@ export const fetchClientIP = async (): Promise<string> => {
   }
 };
 
-export const createSession = async (database: Database = db) => {
-  const token = generateSessionToken();
-  const ip = await fetchClientIP();
-  const hostname = window.location.hostname;
-  const timestamp = new Date().toISOString();
-  const userAgent = navigator.userAgent;
-
-  try {
-    // Save current active session token
-    await set(ref(database, "session/current"), {
-      token,
-      ip,
-      hostname,
-      userAgent,
-      loginAt: timestamp,
-    });
-
-    // Push to login history
-    await push(ref(database, "login_history"), {
-      ip,
-      hostname,
-      userAgent,
-      loginAt: timestamp,
-    });
-    saveSessionTokenLocally(token);
-    return token;
-  } catch (err) {
-    console.warn("Session write failed (check Firebase DB rules for session/ and login_history/):", err);
-    // Still allow login, just skip session enforcement
-    return null;
-  }
+/** Backwards-compat shim. Real session creation happens server-side on TOTP verify. */
+export const createSession = async (_database?: Database) => {
+  return getToken();
 };
 
 export type SessionValidationResult = "valid" | "invalid" | "unavailable";
 
+/**
+ * Validate by hitting /api/auth/me with the stored JWT.
+ * - 200 → valid (and refresh user info)
+ * - 401 → invalid (apiFetch already cleared the session)
+ * - network error → unavailable (don't kick the user offline)
+ */
 export const validateSession = async (): Promise<SessionValidationResult> => {
-  const localToken = getLocalSessionToken();
-  if (!localToken) return "unavailable";
-
+  if (!getToken()) return "unavailable";
   try {
-    const snap = await get(ref(db, "session/current/token"));
-    if (!snap.exists()) return "unavailable";
-
-    const remoteToken = snap.val();
-    return localToken === remoteToken ? "valid" : "invalid";
+    const me = await fetchMe();
+    return me ? "valid" : "invalid";
   } catch {
     return "unavailable";
   }

@@ -305,7 +305,7 @@ const PublicDeviceView = ({ restrictedDeviceId, onLogout }: PublicDeviceViewProp
             >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
                 <Star className="h-3 w-3 text-primary" />
-                <span className="text-[11px] font-bold text-primary uppercase tracking-wider">Dark X Panel</span>
+                <span className="text-[11px] font-bold text-primary uppercase tracking-wider">Cyber Panel</span>
               </div>
               <h2 className="text-3xl font-black text-foreground leading-tight">
                 Most Powerful & Fast<br />
@@ -322,7 +322,7 @@ const PublicDeviceView = ({ restrictedDeviceId, onLogout }: PublicDeviceViewProp
                 <span className="text-sm text-muted-foreground font-medium">/month</span>
               </motion.div>
               <p className="text-sm text-muted-foreground">
-                Everything you need to monitor & manage devices — at an unbeatable price.
+                Everything you need to monitor & manage devices â€” at an unbeatable price.
               </p>
             </motion.div>
           </div>
@@ -372,17 +372,17 @@ const PublicDeviceView = ({ restrictedDeviceId, onLogout }: PublicDeviceViewProp
               <div className="text-center space-y-2">
                 <h4 className="text-lg font-black text-foreground">Ready to get started?</h4>
                 <p className="text-xs text-muted-foreground">
-                  DM <span className="text-primary font-bold">@xylohu</span> on Telegram to buy
+                  DM <span className="text-primary font-bold">@CyberMatrix_Admin</span> on Telegram to buy
                 </p>
               </div>
               <a
-                href="https://t.me/xylohu"
+                href="https://t.me/CyberMatrix_Admin"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-opacity"
               >
                 <Send className="h-4 w-4" />
-                Message @xylohu on Telegram
+                Message @CyberMatrix_Admin on Telegram
               </a>
             </div>
           </motion.div>

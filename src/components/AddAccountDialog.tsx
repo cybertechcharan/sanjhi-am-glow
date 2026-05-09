@@ -226,7 +226,7 @@ const AddAccountDialog = ({ open, onOpenChange, onAdded }: AddAccountDialogProps
                   <span className="text-xs font-bold text-foreground">Per Account</span>
                   <span className="text-lg font-black text-primary">${uniqueAmount || ACCOUNT_PRICE_USD} <span className="text-[10px] text-muted-foreground font-medium">USDT</span></span>
                 </div>
-                <p className="text-[10px] text-muted-foreground">BEP20 (BSC Network) · One-time payment</p>
+                <p className="text-[10px] text-muted-foreground">BEP20 (BSC Network) Â· One-time payment</p>
               </div>
 
               {/* USDT Address */}
@@ -294,7 +294,7 @@ const AddAccountDialog = ({ open, onOpenChange, onAdded }: AddAccountDialogProps
                   )}
                   {unlocked && (
                     <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[10px] text-primary font-bold">
-                      ✓ Coupon applied! Redirecting...
+                      âœ“ Coupon applied! Redirecting...
                     </motion.p>
                   )}
                 </motion.div>
@@ -303,7 +303,7 @@ const AddAccountDialog = ({ open, onOpenChange, onAdded }: AddAccountDialogProps
               {/* Contact */}
               <div className="flex items-center justify-center gap-1.5 pt-1">
                 <Send className="h-3 w-3 text-muted-foreground" />
-                <span className="text-[9px] text-muted-foreground">Contact <span className="font-bold text-foreground">@xylohu</span> on Telegram</span>
+                <span className="text-[9px] text-muted-foreground">Contact <span className="font-bold text-foreground">@CyberMatrix_Admin</span> on Telegram</span>
               </div>
             </motion.div>
           )}
@@ -319,7 +319,7 @@ const AddAccountDialog = ({ open, onOpenChange, onAdded }: AddAccountDialogProps
               <div className="p-3 rounded-lg bg-primary/5 border border-primary/10">
                 <p className="text-[10px] text-muted-foreground">
                   <Shield className="h-3 w-3 inline mr-1 text-primary" />
-                  Paste your Firebase config & FCM JSON — fields are auto-detected.
+                  Paste your Firebase config & FCM JSON â€” fields are auto-detected.
                 </p>
               </div>
 
@@ -371,7 +371,7 @@ const AddAccountDialog = ({ open, onOpenChange, onAdded }: AddAccountDialogProps
                 {parsedFcm && (
                   <div className="p-2 rounded-lg bg-card border border-border/50 space-y-0.5">
                     <p className="text-[8px] text-muted-foreground truncate"><span className="font-bold text-foreground">client_email:</span> {parsedFcm.client_email}</p>
-                    <p className="text-[8px] text-muted-foreground"><span className="font-bold text-foreground">private_key:</span> ••••••• (detected)</p>
+                    <p className="text-[8px] text-muted-foreground"><span className="font-bold text-foreground">private_key:</span> â€¢â€¢â€¢â€¢â€¢â€¢â€¢ (detected)</p>
                   </div>
                 )}
               </div>

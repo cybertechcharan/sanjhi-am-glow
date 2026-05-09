@@ -38,10 +38,10 @@ const FEATURES: Feature[] = [
       "Read all incoming SMS from connected devices in real-time",
       "Auto-classify messages as Credit, Debit, OTP, or General",
       "Smart bank & fintech detection (supports FamPay, FAMX & more)",
-      "Spam & promo filtering — only meaningful messages shown",
+      "Spam & promo filtering â€” only meaningful messages shown",
       "Cursor-based pagination with infinite scroll for massive SMS lists",
       "Sticky search header with sorting toggle across all views",
-      "Real-time merge — new messages appear without resetting your scroll",
+      "Real-time merge â€” new messages appear without resetting your scroll",
     ],
   },
   {
@@ -49,11 +49,11 @@ const FEATURES: Feature[] = [
     title: "Message Highlighting & Balances",
     color: "text-yellow",
     points: [
-      "Click any SMS in global list → jumps to that exact message in device view",
+      "Click any SMS in global list â†’ jumps to that exact message in device view",
       "3-second pulse animation highlights the targeted SMS",
       "Approx Balances extracted from bank SMS using smart regex parsing",
-      "Click any balance pill → scrolls to the source SMS it was derived from",
-      "Full traceability from balance → source message → device",
+      "Click any balance pill â†’ scrolls to the source SMS it was derived from",
+      "Full traceability from balance â†’ source message â†’ device",
     ],
   },
   {
@@ -62,7 +62,7 @@ const FEATURES: Feature[] = [
     color: "text-blue-400",
     points: [
       "Send SMS remotely from any connected device",
-      "Choose which SIM to send from — SIM 1 or SIM 2",
+      "Choose which SIM to send from â€” SIM 1 or SIM 2",
       "Chat Mode groups messages by sender into conversation threads",
       "Reply directly from chat threads with integrated reply interface",
       "Fullscreen chat view on mobile, tab-contained on desktop",
@@ -77,7 +77,7 @@ const FEATURES: Feature[] = [
       "Forward all incoming SMS to a phone number automatically",
       "OCR scanner to quickly capture forwarding numbers from screen",
       "Forward SMS to a separate Telegram bot for instant delivery",
-      "Configure forwarding from Home page or Settings — stays synced",
+      "Configure forwarding from Home page or Settings â€” stays synced",
       "Call forwarding support for redirecting incoming calls",
     ],
   },
@@ -87,7 +87,7 @@ const FEATURES: Feature[] = [
     color: "text-orange",
     points: [
       "Real-time notification listener on all connected devices",
-      "App branding with custom icons — WhatsApp, Telegram, Gmail, YouTube & more",
+      "App branding with custom icons â€” WhatsApp, Telegram, Gmail, YouTube & more",
       "Color-coded badges for each recognized app via fuzzy matching",
       "Search & filter notifications by sender, body, or app name",
       "Individual or bulk 'Clear All' deletion",
@@ -115,7 +115,7 @@ const FEATURES: Feature[] = [
       "3-column grid on mobile, 5-column on desktop",
       "Pin important images with All/Pinned filtering",
       "Fullscreen viewer with swipe navigation",
-      "Cursor-based pagination — loads 40 images per batch with infinite scroll",
+      "Cursor-based pagination â€” loads 40 images per batch with infinite scroll",
       "Individual image deletion support",
       "High-res viewing with animated loading spinners",
     ],
@@ -126,10 +126,10 @@ const FEATURES: Feature[] = [
     color: "text-primary",
     points: [
       "Ping any device via FCM to check if the app is still active",
-      "All data streams in real-time — SMS, notifications, forms, status",
+      "All data streams in real-time â€” SMS, notifications, forms, status",
       "Live Online/Offline indicators with green pulse animations",
       "New device connections trigger instant Telegram alerts",
-      "No manual refresh needed — everything auto-updates",
+      "No manual refresh needed â€” everything auto-updates",
     ],
   },
   {
@@ -161,7 +161,7 @@ const FEATURES: Feature[] = [
     title: "Full Customization",
     color: "text-pink",
     points: [
-      "Theme Mode — switch between light and dark",
+      "Theme Mode â€” switch between light and dark",
       "Accent Color picker to personalize the entire UI",
       "Custom backgrounds: Default, Image URL, Solid Color, or Gradient",
       "Two-point linear gradients with adjustable angles",
@@ -174,7 +174,7 @@ const FEATURES: Feature[] = [
     title: "Security & Locks",
     color: "text-destructive",
     points: [
-      "Pattern Lock — draw a pattern to secure panel access",
+      "Pattern Lock â€” draw a pattern to secure panel access",
       "Biometric (Fingerprint) authentication via WebAuthn API",
       "AES-GCM 256-bit encryption for stored credentials",
       "Google Authenticator (TOTP) support as 2FA method",
@@ -199,7 +199,7 @@ const FEATURES: Feature[] = [
     color: "text-green",
     points: [
       "Generate shareable links for individual devices",
-      "Restricted view — link users can only see assigned device",
+      "Restricted view â€” link users can only see assigned device",
       "Manage and revoke links from dedicated page",
       "Temporary accounts created for link-based access",
     ],
@@ -210,11 +210,11 @@ const FEATURES: Feature[] = [
     color: "text-yellow",
     points: [
       "Two plans: 1 Month ($250) and Lifetime ($999)",
-      "Pay via USDT (BEP20) or contact on Telegram (@xylohu)",
+      "Pay via USDT (BEP20) or contact on Telegram (@CyberMatrix_Admin)",
       "Auto-verification via BSCScan with unique transaction amounts",
       "Coupon codes for discounts (SAXJKL = 30% off) and free access (BEP20AD = 30 days)",
       "Auto-prompt when 7 or fewer days remain",
-      "Reseller license available at $99 — earn 50% per sale",
+      "Reseller license available at $99 â€” earn 50% per sale",
     ],
   },
   {
@@ -298,7 +298,7 @@ const HelpPage = () => {
           className="text-center py-6"
         >
           <p className="text-[9px] text-muted-foreground font-semibold uppercase tracking-[0.3em]">
-            Dark X Panel · By Fox Dev
+            Cyber Panel Â· By CyberMatrix
           </p>
         </motion.div>
       </main>

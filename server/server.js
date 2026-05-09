@@ -1,15 +1,25 @@
 /**
- * webrtochallan-style stack: Express REST + Mongoose + Socket.IO (+ optional Change Streams).
+ * Cyber Panel server — Express + MongoDB + Socket.IO.
  *
- * Not wired into the Vite app yet — next step: add JWT/session auth, more routes (sms, settings),
- * then replace src/lib/rtdbPb + pocketbase with fetch + socket.io-client.
- *
- * MongoDB Change Streams need a replica set (e.g. MongoDB Atlas). On standalone local Mongo,
- * watch() may fail; the API still works.
+ * Hardening summary:
+ *  - Helmet for HTTP security headers.
+ *  - Strict CORS (only origins listed in CORS_ORIGIN env, no `*` in prod).
+ *  - Global rate limit on /api plus tighter limits on /api/auth.
+ *  - JWT-protected /api/rtdb, /api/devices, /api/auth/me, etc. (see routes).
+ *  - Path write-guard prevents clobbering server-managed RTDB paths
+ *    (auth/*, session/*, panel_config.scanned_by, ...).
+ *  - Multi-tenant isolation: every request resolves a tenantId from the JWT
+ *    and the controller scopes all reads/writes to that tenant only.
+ *  - Socket.IO requires a JWT and joins a per-tenant room, so realtime
+ *    updates never cross tenants.
+ *  - Mandatory TOTP 2FA: login is a 2-step credential → TOTP flow.
  */
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import jwt from "jsonwebtoken";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
@@ -17,26 +27,57 @@ import { connectDB } from "./config/db.js";
 import deviceRoutes from "./routes/deviceRoutes.js";
 import rtdbRoutes from "./routes/rtdbRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import Device from "./models/Device.js";
 import { initAdminPassword } from "./controllers/authController.js";
 
 const PORT = Number(process.env.PORT) || 5050;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
+const RAW_CORS = (process.env.CORS_ORIGIN || "").trim();
+const NODE_ENV = process.env.NODE_ENV || "development";
+const allowedOrigins =
+  RAW_CORS && RAW_CORS !== "*"
+    ? RAW_CORS.split(",").map((s) => s.trim()).filter(Boolean)
+    : NODE_ENV === "production"
+      ? []
+      : true; // dev: allow any origin
+
+if (NODE_ENV === "production" && (!Array.isArray(allowedOrigins) || allowedOrigins.length === 0)) {
+  console.warn(
+    "[cors] CORS_ORIGIN must list explicit origins in production. Refusing all browser origins until configured."
+  );
+}
+
+if (!process.env.JWT_SECRET) {
+  console.warn(
+    "[boot] JWT_SECRET is not set. The server will use an insecure fallback secret. Set JWT_SECRET in env."
+  );
+}
+
 let lastDbError = "not attempted";
 let lastDbAttemptAt = 0;
 
 const app = express();
+app.set("trust proxy", 1);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: CORS_ORIGIN === "*" ? true : CORS_ORIGIN.split(",").map((s) => s.trim()), methods: ["GET", "POST"] },
+  cors: { origin: allowedOrigins, methods: ["GET", "POST"] },
 });
 
-app.use(cors({ origin: CORS_ORIGIN === "*" ? true : CORS_ORIGIN.split(",").map((s) => s.trim()) }));
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
+app.use(cors({ origin: allowedOrigins, credentials: false }));
 app.use(express.json({ limit: "2mb" }));
 app.set("io", io);
 
+const apiLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 1200,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api", apiLimiter);
+
 app.get("/", (_req, res) => {
-  res.type("text").send("sanjhi-panel-server ok");
+  res.type("text").send("cyber-panel-server ok");
 });
 
 app.get("/api/debug/db", (_req, res) => {
@@ -56,9 +97,10 @@ app.get("/api/debug/db", (_req, res) => {
   });
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/devices", deviceRoutes);
 app.use("/api/rtdb", rtdbRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 
 const watchers = new Map();
 
@@ -70,10 +112,33 @@ function notifyWatchers(deviceId, payload) {
   }
 }
 
+const SOCKET_SECRET = process.env.JWT_SECRET || "INSECURE_DEV_SECRET_DO_NOT_USE_IN_PROD";
+
+io.use((socket, next) => {
+  try {
+    const token = socket.handshake.auth?.token || socket.handshake.query?.token;
+    if (!token) return next(new Error("missing token"));
+    const decoded = jwt.verify(String(token), SOCKET_SECRET);
+    if (!decoded.tenantId || (decoded.scope !== "panel" && decoded.scope !== "admin")) {
+      return next(new Error("invalid scope"));
+    }
+    socket.data.tenantId = decoded.tenantId;
+    socket.data.role = decoded.role;
+    return next();
+  } catch {
+    return next(new Error("invalid token"));
+  }
+});
+
 io.on("connection", (socket) => {
+  const tenantId = socket.data.tenantId;
+  socket.join(`tenant:${tenantId}`);
+
   socket.on("watchDevice", (rawId) => {
     const id = String(rawId || "").trim();
     if (!id) return;
+    const room = `tenant:${tenantId}:${id}`;
+    socket.join(room);
     if (!watchers.has(id)) watchers.set(id, new Set());
     watchers.get(id).add(socket.id);
   });
@@ -82,14 +147,16 @@ io.on("connection", (socket) => {
     const id = String(rawId || "").trim();
     if (!id || !watchers.has(id)) return;
     watchers.get(id).delete(socket.id);
+    socket.leave(`tenant:${tenantId}:${id}`);
   });
 
   socket.on("registerDevice", (rawId) => {
     const id = String(rawId || "").trim();
     if (!id) return;
-    socket.join(id);
+    const room = `tenant:${tenantId}:${id}`;
+    socket.join(room);
     socket.emit("deviceRegistered", { android_id: id });
-    io.emit("deviceStatus", { android_id: id, connectivity: "Online", updatedAt: new Date() });
+    io.to(`tenant:${tenantId}`).emit("deviceStatus", { android_id: id, connectivity: "Online", updatedAt: new Date() });
     notifyWatchers(id, { type: "status", android_id: id, connectivity: "Online" });
   });
 
@@ -106,9 +173,9 @@ function startWatch() {
     stream.on("change", async (chg) => {
       if (!["insert", "update", "replace"].includes(chg.operationType)) return;
       const doc = await Device.findById(chg.documentKey._id).lean();
-      if (!doc?.android_id) return;
-      io.emit("deviceUpdateGlobal", doc);
-      io.to(doc.android_id).emit("deviceUpdate", doc);
+      if (!doc?.android_id || !doc?.tenantId) return;
+      io.to(`tenant:${doc.tenantId}`).emit("deviceUpdateGlobal", doc);
+      io.to(`tenant:${doc.tenantId}:${doc.android_id}`).emit("deviceUpdate", doc);
       notifyWatchers(doc.android_id, { type: "device", ...doc });
     });
     stream.on("error", () => {
@@ -121,7 +188,7 @@ function startWatch() {
 }
 
 httpServer.listen(PORT, () => {
-  console.log(`sanjhi-panel-server http://localhost:${PORT}`);
+  console.log(`cyber-panel-server http://localhost:${PORT}`);
 });
 
 async function connectWithRetry() {

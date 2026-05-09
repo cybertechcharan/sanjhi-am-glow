@@ -139,7 +139,7 @@ export interface CustomizationSettings {
 }
 
 const DEFAULT_CUSTOMIZATION: CustomizationSettings = {
-  panel_name: "Dark x Panel 3.0",
+  panel_name: "Cyber Panel",
   bg_image_url: "",
   accent_hex: "#7c3aed",
   gradient_from: "#7c3aed",
@@ -297,7 +297,7 @@ export function getAccentHex(): string {
   return getSnapshot().accent_hex;
 }
 
-// Panel name is hardcoded to "Dark x Panel 3.0" and cannot be changed
+// Panel name is hardcoded to "Cyber Panel" and cannot be changed
 
 export async function setBgImageUrl(url: string) {
   const bg_image_url = url.trim();

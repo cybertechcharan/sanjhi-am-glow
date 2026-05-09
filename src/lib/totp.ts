@@ -3,7 +3,7 @@ import QRCode from "qrcode";
 import { ref, get, set } from "@/lib/rtdbPb";
 import { db } from "@/lib/firebase";
 
-const ISSUER = "DarkXPanel";
+const ISSUER = "Cyber Panel";
 const LABEL = "Admin";
 
 export function generateTotpSecret(): string {

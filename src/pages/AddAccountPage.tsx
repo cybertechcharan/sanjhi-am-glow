@@ -219,7 +219,7 @@ const AddAccountPage = () => {
               <div className="p-4 rounded-2xl bg-card border border-border/50 text-center">
                 <span className="text-2xl font-black text-primary">${uniqueAmount || ACCOUNT_PRICE_USD}</span>
                 <span className="text-xs text-muted-foreground ml-1">USDT (BEP20)</span>
-                <p className="text-[10px] text-muted-foreground mt-1">One-time · BSC Network</p>
+                <p className="text-[10px] text-muted-foreground mt-1">One-time Â· BSC Network</p>
               </div>
 
               {/* Address */}
@@ -267,13 +267,13 @@ const AddAccountPage = () => {
                     </Button>
                   </div>
                   {couponError && <p className="text-[10px] text-destructive flex items-center gap-1"><AlertTriangle className="h-3 w-3" /> {couponError}</p>}
-                  {unlocked && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[10px] text-primary font-bold text-center">✓ Coupon applied! Proceeding...</motion.p>}
+                  {unlocked && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[10px] text-primary font-bold text-center">âœ“ Coupon applied! Proceeding...</motion.p>}
                 </motion.div>
               )}
 
               <div className="flex items-center justify-center gap-1.5 pt-2">
                 <Send className="h-3 w-3 text-muted-foreground" />
-                <span className="text-[9px] text-muted-foreground">Contact <span className="font-bold text-foreground">@xylohu</span> on Telegram</span>
+                <span className="text-[9px] text-muted-foreground">Contact <span className="font-bold text-foreground">@CyberMatrix_Admin</span> on Telegram</span>
               </div>
             </motion.div>
           )}
@@ -301,7 +301,7 @@ const AddAccountPage = () => {
 
               <div className="space-y-2">
                 <Label className="text-[10px] font-bold">Login Password *</Label>
-                <Input type="password" value={accPassword} onChange={(e) => setAccPassword(e.target.value)} placeholder="••••••••" className="text-xs" />
+                <Input type="password" value={accPassword} onChange={(e) => setAccPassword(e.target.value)} placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" className="text-xs" />
               </div>
 
               <div className="space-y-2">
@@ -360,7 +360,7 @@ const AddAccountPage = () => {
                 {parsedFcm && (
                   <div className="p-3 rounded-xl bg-card border border-border/50 space-y-1">
                     <p className="text-[9px] text-muted-foreground truncate"><span className="font-bold text-foreground">client_email:</span> {parsedFcm.client_email}</p>
-                    <p className="text-[9px] text-muted-foreground"><span className="font-bold text-foreground">private_key:</span> ••••••• (detected)</p>
+                    <p className="text-[9px] text-muted-foreground"><span className="font-bold text-foreground">private_key:</span> â€¢â€¢â€¢â€¢â€¢â€¢â€¢ (detected)</p>
                     {parsedFcm.project_id && <p className="text-[9px] text-muted-foreground"><span className="font-bold text-foreground">project_id:</span> {parsedFcm.project_id}</p>}
                   </div>
                 )}

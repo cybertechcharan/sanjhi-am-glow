@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 
-/** Aligns with Android PbApi.saveDevice + web DeviceUser / devices collection. */
+/**
+ * Devices are scoped per tenant. android_id is unique *inside a tenant*
+ * (compound unique index), so two different admins can have devices with
+ * the same android_id without collision.
+ */
 const deviceSchema = new mongoose.Schema(
   {
-    android_id: { type: String, required: true, unique: true, index: true },
+    tenantId: { type: String, required: true, index: true },
+    android_id: { type: String, required: true, index: true },
     brand: { type: String, default: "" },
     model: { type: String, default: "" },
     android_version: { type: String, default: "" },
@@ -21,5 +26,7 @@ const deviceSchema = new mongoose.Schema(
   },
   { timestamps: true, collection: "devices" }
 );
+
+deviceSchema.index({ tenantId: 1, android_id: 1 }, { unique: true });
 
 export default mongoose.model("Device", deviceSchema);

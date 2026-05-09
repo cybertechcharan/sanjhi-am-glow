@@ -85,7 +85,7 @@ const DeviceCard = ({ id, index, user, onClick, onDelete, notes, onNotesChange, 
     setCreatingLink(true);
     try {
       const randStr = Math.random().toString(36).slice(2, 10);
-      const tempEmail = `link_${id}_${randStr}@temp.darkxpanel.dev`;
+      const tempEmail = `link_${id}_${randStr}@temp.cyberpanel.dev`;
       const tempPass = `lnk_${Math.random().toString(36).slice(2)}${Date.now()}`;
       const { user: viewerUser } = await createUserWithEmailAndPassword(publicAuth, tempEmail, tempPass);
       // Generate AES key and encrypt credentials

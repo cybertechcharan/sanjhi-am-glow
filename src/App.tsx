@@ -6,10 +6,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from "@/lib/authPb";
+import { onAuthStateChanged, signOut } from "@/lib/authPb";
 import { auth } from "@/lib/firebase";
 import { validateSession, clearLocalSessionToken, getLocalSessionToken } from "@/lib/session";
-import { getSwitchedCreds, getActiveAccountId, switchToDefault } from "@/lib/multiAccount";
+import { getActiveAccountId, switchToDefault } from "@/lib/multiAccount";
+import { getStoredUser } from "@/lib/apiClient";
 import BottomNav from "@/components/BottomNav";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import Index from "./pages/Index.tsx";
@@ -35,6 +36,7 @@ import AddAccountPage from "./pages/AddAccountPage.tsx";
 import EditAccountPage from "./pages/EditAccountPage.tsx";
 import BulkSmsPage from "./pages/BulkSmsPage.tsx";
 import ApksPage from "./pages/ApksPage.tsx";
+import AdminPanelPage from "./pages/AdminPanelPage.tsx";
 import { Loader2 } from "lucide-react";
 import { usePanelConfig } from "@/hooks/usePanelConfig";
 import PanelExpiredScreen from "@/components/PanelExpiredScreen";
@@ -109,7 +111,7 @@ const FullscreenLoader = () => {
         transition={{ delay: 0.3, duration: 0.5 }}
       >
         <h1 className="text-xl font-black tracking-tight text-neutral-900">
-          Dark <span className="text-primary">X</span> Panel
+          Cyber <span className="text-primary">Panel</span>
         </h1>
         <p className="text-[11px] text-neutral-400 font-medium tracking-widest uppercase">
           {activeId ? "Logging into" : "Loading"}
@@ -139,9 +141,20 @@ const FullscreenLoader = () => {
 
 const AuthenticatedApp = ({ onLogout }: { onLogout: () => Promise<void> }) => {
   const { config, loading, isExpired, isConfigured } = usePanelConfig();
+  const storedUser = getStoredUser();
+  const isSuperadmin = storedUser?.role === "superadmin";
 
   if (loading) {
     return <FullscreenLoader />;
+  }
+
+  if (isSuperadmin) {
+    return (
+      <Routes>
+        <Route path="/admin" element={<AdminPanelPage onLogout={onLogout} />} />
+        <Route path="*" element={<AdminPanelPage onLogout={onLogout} />} />
+      </Routes>
+    );
   }
 
   if (!isConfigured) {
@@ -207,52 +220,28 @@ const AppContent = () => {
 
   useEffect(() => {
     let isMounted = true;
-    let triedSwitchedLogin = false;
 
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!isMounted) return;
 
       if (!user) {
-        const activeAccountId = getActiveAccountId();
-        // If we have switched account creds, auto-login
-        const switchedCreds = getSwitchedCreds();
-        if (activeAccountId && !switchedCreds) {
-          await switchToDefault();
-          window.location.reload();
-          return;
-        }
-        if (switchedCreds && activeAccountId && !triedSwitchedLogin) {
-          triedSwitchedLogin = true;
-          try {
-            await signInWithEmailAndPassword(auth, switchedCreds.email, switchedCreds.password);
-            return; // onAuthStateChanged will fire again with the user
-          } catch {
-            // Failed to login with switched creds, fall back to default
-            await switchToDefault();
-            window.location.reload();
-            return;
-          }
-        }
+        // Switched-account auto-relogin removed: every login now requires TOTP.
+        // If a switched profile is active without a valid token, drop back to default.
+        if (getActiveAccountId()) await switchToDefault();
         setAuthed(false);
         setRestrictedDeviceId(null);
         return;
       }
 
-      // Check if this is a temp link account
       const email = user.email || "";
-      if (email.includes("@temp.darkxpanel.dev")) {
-        const match = email.match(/^link_(.+?)_[^@]+@temp\.darkxpanel\.dev$/);
-        if (match) {
-          setRestrictedDeviceId(match[1]);
-        }
+      if (email.includes("@temp.cyberpanel.dev") || email.includes("@temp.darkxpanel.dev")) {
+        const match = email.match(/^link_(.+?)_[^@]+@temp\.(?:cyberpanel|darkxpanel)\.dev$/);
+        if (match) setRestrictedDeviceId(match[1]);
       } else {
         setRestrictedDeviceId(null);
       }
 
       setAuthed(true);
-
-      // Skip session validation for switched accounts (session lives on default DB only)
-      if (getActiveAccountId()) return;
 
       const localToken = getLocalSessionToken();
       if (!localToken) return;

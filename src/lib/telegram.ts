@@ -68,6 +68,6 @@ export function verifyOtp(input: string): boolean {
 
 export async function sendOtpToTelegram(action: string): Promise<boolean> {
   const otp = generateOtp();
-  const msg = `🔐 <b>Dark x Panel 3.0 — 2FA OTP</b>\n\nAction: <b>${action}</b>\nOTP: <code>${otp}</code>\n\nThis OTP expires after one use.`;
+  const msg = `🔐 <b>Cyber Panel — 2FA OTP</b>\n\nAction: <b>${action}</b>\nOTP: <code>${otp}</code>\n\nThis OTP expires after one use.`;
   return sendTelegramMessage(msg);
 }
